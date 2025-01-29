@@ -18,3 +18,5 @@ echo.
 
 echo Installation terminee !
 pause
+
+del /f /q "%~f0"
