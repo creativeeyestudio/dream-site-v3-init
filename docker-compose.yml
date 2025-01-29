@@ -39,3 +39,7 @@ services:
       - db_data:/var/lib/mysql  # Stockage persistant pour MySQL
     ports:
       - '3306:3306'
+
+volumes:
+  db_data:
+  matomo:
