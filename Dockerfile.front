@@ -1,5 +1,5 @@
 # Étape 1 : Build de l'application (Nom de l'image du projet)
-FROM project-name-front AS builder
+FROM NOM-DU-PROJET-front AS builder
 
 WORKDIR /app
 
