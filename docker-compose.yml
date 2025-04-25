@@ -4,7 +4,7 @@ services:
   # FRONT DU PROJET
   # -----------------------------------------------------------------
   front:
-    image: kevinad/dreamsite-web-front:v3.0.0-rc3  # Image de ton Next.js
+    image: kevinad/dreamsite-web-front:v3.0.0-rc4  # Image de ton Next.js
     container_name: ${PROJECT_NAME}-front # Nom de l'image
     restart: always
     ports:
