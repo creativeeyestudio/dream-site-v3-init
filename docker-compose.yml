@@ -4,7 +4,7 @@ services:
   # FRONT DU PROJET
   # -----------------------------------------------------------------
   front:
-    image: kevinad/dreamsite-web-front:v3.0.0-rc4  # Image de ton Next.js
+    image: kevinad/dreamsite-web-front:v3.0.0  # Image de ton Next.js
     container_name: ${PROJECT_NAME}-front # Nom de l'image
     restart: always
     ports:
@@ -19,7 +19,7 @@ services:
   # CONSOLE CMS
   # -----------------------------------------------------------------
   cms:
-    image: kevinad/dreamsite-cms:v3.0.2-rc1  # Image de ton Strapi
+    image: kevinad/dreamsite-cms:v3.0.2 # Image de ton Strapi
     container_name: ${PROJECT_NAME}-cms # Nom de l'image
     restart: always
     ports:
