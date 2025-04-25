@@ -1,32 +1,30 @@
-# Creating multi-stage build for production (Nom du Strapi du projet)
-ARG BASE_IMAGE
-FROM ${BASE_IMAGE} AS builder
+# Étape de build à partir de l'image de dev
+FROM project-name-cms as builder
 
-RUN apk update && apk add --no-cache build-base gcc autoconf automake zlib-dev libpng-dev vips-dev git > /dev/null 2>&1
-ARG NODE_ENV=production
-ENV NODE_ENV=${NODE_ENV}
-
-WORKDIR /opt/
-COPY package.json yarn.lock ./
-RUN yarn global add node-gyp
-RUN yarn config set network-timeout 600000 -g && yarn install --production
-ENV PATH=/opt/node_modules/.bin:$PATH
+# S'assurer d'être dans le bon dossier
 WORKDIR /opt/app
-COPY . .
+
+# Rebuild au cas où
 RUN yarn build
 
-# Creating final production image
+# Étape finale allégée
 FROM node:20-alpine
-RUN apk add --no-cache vips-dev
-ENV NODE_ENV=production
-ENV NODE_ENV=${NODE_ENV}
-WORKDIR /opt/
-COPY --from=build /opt/node_modules ./node_modules
-WORKDIR /opt/app
-COPY --from=build /opt/app ./
-ENV PATH=/opt/node_modules/.bin:$PATH
 
+# Dépendances système nécessaires pour Sharp
+RUN apk add --no-cache vips-dev
+
+ENV NODE_ENV=production
+WORKDIR /opt/app
+
+# Copie de l'app + dépendances depuis l'image dev
+COPY --from=builder /opt/app ./
+
+# Permissions
 RUN chown -R node:node /opt/app
 USER node
+
+# Port exposé
 EXPOSE 1337
+
+# Commande de lancement en prod
 CMD ["yarn", "start"]

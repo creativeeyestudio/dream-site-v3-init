@@ -1,8 +1,10 @@
+name: ${PROJECT_NAME}
+
 services:
   # FRONT DU PROJET
   # -----------------------------------------------------------------
   front:
-    image: kevinad/dreamsite-web-front  # Image de ton Next.js
+    image: kevinad/dreamsite-web-front:v3.0.0-rc4  # Image de ton Next.js
     container_name: ${PROJECT_NAME}-front # Nom de l'image
     restart: always
     ports:
@@ -12,14 +14,12 @@ services:
       - NEXT_PUBLIC_API_TOKEN=${NEXT_PUBLIC_API_TOKEN}
     depends_on:
       - cms  # Démarre après Strapi
-      - mysql
-    networks:
-      - ${PROJECT_NAME}-network
+      - cms_db
 
   # CONSOLE CMS
   # -----------------------------------------------------------------
   cms:
-    image: kevinad/dreamsite-cms  # Image de ton Strapi
+    image: kevinad/dreamsite-cms:v3.0.2-rc1  # Image de ton Strapi
     container_name: ${PROJECT_NAME}-cms # Nom de l'image
     restart: always
     ports:
@@ -31,13 +31,16 @@ services:
       - DATABASE_NAME=${DATABASE_NAME}
       - DATABASE_USERNAME=${DATABASE_USERNAME}
       - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - JWT_SECRET=${JWT_SECRET}
+      - APP_KEYS=${APP_KEYS}
+      - API_TOKEN_SALT=${API_TOKEN_SALT}
+      - ADMIN_JWT_SECRET=${ADMIN_JWT_SECRET}
+      - TRANSFER_TOKEN_SALT=${TRANSFER_TOKEN_SALT}
     depends_on:
-      - mysql  # Démarre après MySQL
-    networks:
-      - ${PROJECT_NAME}-network
+      - cms_db  # Démarre après MySQL
 
   cms_db:
-    image: mysql:8.0
+    image: kevinad/dreamsite-cms-db:latest
     container_name: ${PROJECT_NAME}-db # Nom de l'image
     restart: always
     ports:
@@ -49,8 +52,19 @@ services:
       - MYSQL_PASSWORD=${DATABASE_PASSWORD}
     volumes:
       - mysql_data:/var/lib/mysql  # Persistance des données
-    networks:
-      - ${PROJECT_NAME}-network
+
+  # MAILDEV
+  # -----------------------------------------------------------------
+  maildev:
+    image: maildev/maildev
+    restart: always
+    environment:
+      - TZ=Europe/France
+      - MAILDEV_WEB_PORT=1080
+      - MAILDEV_SMTP_PORT=1025
+    ports:
+      - "1080:1080"
+      - "1025:1025"
 
 volumes:
   mysql_data:
