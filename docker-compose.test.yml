@@ -4,9 +4,9 @@ services:
   # FRONT DU PROJET
   # -----------------------------------------------------------------
   front:
-    image: ${PROJECT_NAME}-front  # Image de ton Next.js
+    image: kevinad/${PROJECT_NAME}-front  # Image de ton Next.js
 
   # CONSOLE CMS
   # -----------------------------------------------------------------
   cms:
-    image: ${PROJECT_NAME}-cms  # Image de ton Strapi
+    image: kevinad/${PROJECT_NAME}-cms  # Image de ton Strapi
