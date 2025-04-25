@@ -19,7 +19,7 @@ services:
   # CONSOLE CMS
   # -----------------------------------------------------------------
   cms:
-    image: kevinad/dreamsite-cms:v3.0.1-dev  # Image de ton Strapi
+    image: kevinad/dreamsite-cms:v3.0.2-rc1  # Image de ton Strapi
     container_name: ${PROJECT_NAME}-cms # Nom de l'image
     restart: always
     ports:
