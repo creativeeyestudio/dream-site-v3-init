@@ -1,16 +1,21 @@
 services:
-  web:
+  # FRONT DU PROJET
+  # -----------------------------------------------------------------
+  front:
     image: kevinad/dreamsite-web-front  # Image de ton Next.js
     restart: always
     ports:
       - "3000:3000"  # Expose Next.js
     environment:
       - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}  # URL de Strapi
+      - NEXT_PUBLIC_API_TOKEN=${NEXT_PUBLIC_API_TOKEN}
     depends_on:
       - admin  # Démarre après Strapi
 
-  admin:
-    image: kevinad/dreamsite-admin  # Image de ton Strapi
+  # CONSOLE CMS
+  # -----------------------------------------------------------------
+  cms:
+    image: kevinad/dreamsite-cms  # Image de ton Strapi
     restart: always
     ports:
       - "1337:1337"  # Expose Strapi
@@ -24,7 +29,7 @@ services:
     depends_on:
       - mysql  # Démarre après MySQL
 
-  mysql:
+  cms_db:
     image: mysql:8.0  # Image officielle de MySQL
     restart: always
     ports:
