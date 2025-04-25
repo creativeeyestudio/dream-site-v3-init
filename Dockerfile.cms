@@ -1,6 +1,5 @@
 # Creating multi-stage build for production (Nom du Strapi du projet)
-ARG BASE_IMAGE
-FROM ${BASE_IMAGE} AS builder
+FROM project-name-cms AS builder
 
 RUN apk update && apk add --no-cache build-base gcc autoconf automake zlib-dev libpng-dev vips-dev git > /dev/null 2>&1
 ARG NODE_ENV=production

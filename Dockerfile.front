@@ -1,6 +1,5 @@
 # Étape 1 : Build de l'application (Nom de l'image du projet)
-ARG BASE_IMAGE
-FROM ${BASE_IMAGE} AS builder
+FROM project-name-front AS builder
 
 WORKDIR /app
 
