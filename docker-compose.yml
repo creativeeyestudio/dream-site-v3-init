@@ -3,6 +3,7 @@ services:
   # -----------------------------------------------------------------
   front:
     image: kevinad/dreamsite-web-front  # Image de ton Next.js
+    container_name: ${PROJECT_NAME}-front # Nom de l'image
     restart: always
     ports:
       - "3000:3000"  # Expose Next.js
@@ -10,12 +11,16 @@ services:
       - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}  # URL de Strapi
       - NEXT_PUBLIC_API_TOKEN=${NEXT_PUBLIC_API_TOKEN}
     depends_on:
-      - admin  # Démarre après Strapi
+      - cms  # Démarre après Strapi
+      - mysql
+    networks:
+      - ${PROJECT_NAME}-network
 
   # CONSOLE CMS
   # -----------------------------------------------------------------
   cms:
     image: kevinad/dreamsite-cms  # Image de ton Strapi
+    container_name: ${PROJECT_NAME}-cms # Nom de l'image
     restart: always
     ports:
       - "1337:1337"  # Expose Strapi
@@ -28,9 +33,12 @@ services:
       - DATABASE_PASSWORD=${DATABASE_PASSWORD}
     depends_on:
       - mysql  # Démarre après MySQL
+    networks:
+      - ${PROJECT_NAME}-network
 
   cms_db:
-    image: mysql:8.0  # Image officielle de MySQL
+    image: mysql:8.0
+    container_name: ${PROJECT_NAME}-db # Nom de l'image
     restart: always
     ports:
       - "3306:3306"  # Expose MySQL
@@ -41,6 +49,11 @@ services:
       - MYSQL_PASSWORD=${DATABASE_PASSWORD}
     volumes:
       - mysql_data:/var/lib/mysql  # Persistance des données
+    networks:
+      - ${PROJECT_NAME}-network
 
 volumes:
   mysql_data:
+
+networks:
+  ${PROJECT_NAME}-network:

@@ -1,0 +1,37 @@
+# Étape 1 : Build de l'application (Nom de l'image du projet)
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE} AS builder
+
+WORKDIR /app
+
+# Copier les fichiers de dépendances
+COPY package*.json ./
+
+# Installer les dépendances
+RUN npm install
+
+# Copier le reste du projet
+COPY . .
+
+# Build de Next.js
+RUN npm run build
+
+# Étape 2 : Exécution de l'application optimisée
+FROM node:slim
+
+WORKDIR /app
+
+# Copier seulement le nécessaire
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/next.config.js ./next.config.js
+
+# Exposer le port
+EXPOSE 3000
+
+# Définir les variables d’environnement (peuvent aussi être passées à l’exécution)
+ENV NODE_ENV=production
+
+CMD ["npm", "run", "start"]
