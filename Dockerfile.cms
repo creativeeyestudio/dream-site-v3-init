@@ -6,6 +6,7 @@ WORKDIR /opt/app
 
 # Rebuild au cas où
 RUN yarn build
+RUN npm prune --production
 
 # Étape finale allégée
 FROM node:20-alpine
