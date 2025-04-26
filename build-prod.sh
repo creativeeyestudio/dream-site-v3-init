@@ -13,9 +13,11 @@ echo "Build de l'image du FRONT"
 echo "==============================="
 docker commit "$front_container" "${PROJECT_NAME}-front"
 docker build -f Dockerfile.front -t kevinad/"${PROJECT_NAME}-front" .
+docker push kevinad/"${PROJECT_NAME}-front"
 
 echo "==============================="
 echo "Build de l'image du CMS"
 echo "==============================="
 docker commit "$cms_container" "${PROJECT_NAME}-cms"
 docker build -f Dockerfile.cms -t kevinad/"${PROJECT_NAME}-cms" .
+docker push kevinad/"${PROJECT_NAME}-cms"
