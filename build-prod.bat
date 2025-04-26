@@ -24,4 +24,4 @@ echo Build de l'image du CMS
 echo ================================
 docker commit %cms_container% %PROJECT_NAME%-cms
 docker build -f Dockerfile.cms -t kevinad/%PROJECT_NAME%-cms .
-docker build -f Dockerfile.cms -t kevinad/%PROJECT_NAME%-cms
+docker push kevinad/%PROJECT_NAME%-cms
