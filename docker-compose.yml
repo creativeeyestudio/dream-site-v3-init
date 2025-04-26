@@ -4,7 +4,8 @@ services:
   # FRONT DU PROJET
   # -----------------------------------------------------------------
   front:
-    image: kevinad/dreamsite-web-front:v3.0.0  # Image de ton Next.js
+    build:
+      context: ./infra/front
     container_name: ${PROJECT_NAME}-front # Nom de l'image
     restart: always
     ports:
@@ -19,7 +20,8 @@ services:
   # CONSOLE CMS
   # -----------------------------------------------------------------
   cms:
-    image: kevinad/dreamsite-cms:v3.0.2 # Image de ton Strapi
+    build:
+      context: ./infra/cms
     container_name: ${PROJECT_NAME}-cms # Nom de l'image
     restart: always
     ports:
@@ -40,7 +42,8 @@ services:
       - cms_db  # Démarre après MySQL
 
   cms_db:
-    image: kevinad/dreamsite-cms-db:latest
+    build:
+      context: ./infra/cms_db
     container_name: ${PROJECT_NAME}-db # Nom de l'image
     restart: always
     ports:
@@ -56,15 +59,16 @@ services:
   # MAILDEV
   # -----------------------------------------------------------------
   maildev:
-    image: maildev/maildev
+    build:
+      context: ./infra/maildev
     restart: always
+    ports:
+      - "1080:1080"
+      - "1025:1025"
     environment:
       - TZ=Europe/France
       - MAILDEV_WEB_PORT=1080
       - MAILDEV_SMTP_PORT=1025
-    ports:
-      - "1080:1080"
-      - "1025:1025"
 
 volumes:
   mysql_data:
