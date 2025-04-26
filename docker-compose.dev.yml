@@ -3,4 +3,4 @@ services:
   # -----------------------------------------------------------------
   front:
     volumes:
-      - ./front:/app/src/components
+      - ./front:/app/src
