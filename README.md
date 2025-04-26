@@ -24,7 +24,7 @@ Faites de même dans les dockerfiles en remplaçant 'NOM-DU-PROJET' par la varia
 ### Lancement de l'instance
 Lancez ensuite la commande suivante selon votre système d'exploitation :
 * Windows : `./init-dev.bat`
-* Mac : `./init-dev.sh` _A venir..._
+* Mac : `./init-dev.sh`
 
 ---
 
