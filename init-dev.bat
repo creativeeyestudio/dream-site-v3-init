@@ -18,7 +18,7 @@ if %ERRORLEVEL% neq 0 (
 
 :: 2. Copier les fichiers du conteneur vers le répertoire local
 echo Copie des fichiers du conteneur vers le répertoire local...
-docker cp %CONTAINER_NAME%:/app/src/components/. ./front
+docker cp %CONTAINER_NAME%:/app/src/. ./front
 
 :: 3. Relancer Docker Compose avec le volume activé
 echo Relance de Docker Compose avec le volume activé...
