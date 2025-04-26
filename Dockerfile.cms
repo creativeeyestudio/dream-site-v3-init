@@ -1,5 +1,5 @@
 # Étape de build à partir de l'image de dev
-FROM NOM-DU-PROJET-cms as builder
+FROM project-name-cms as builder
 
 # S'assurer d'être dans le bon dossier
 WORKDIR /opt/app
