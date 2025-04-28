@@ -4,7 +4,7 @@ services:
   # FRONT DU PROJET
   # -----------------------------------------------------------------
   front:
-    image: kevinad/dreamsite-web-front:v3.0.0
+    image: kevinad/dreamsite-web-front
     container_name: ${PROJECT_NAME}-front # Nom de l'image
     restart: always
     ports:
@@ -19,7 +19,7 @@ services:
   # CONSOLE CMS
   # -----------------------------------------------------------------
   cms:
-    image: kevinad/dreamsite-cms:v3.0.2
+    image: kevinad/dreamsite-cms
     container_name: ${PROJECT_NAME}-cms # Nom de l'image
     restart: always
     ports:
