@@ -1,0 +1,9 @@
+version: "3.8"
+
+services:
+  front:
+    volumes:
+      - ./front-local/src:/app/src
+      - ./front-local/pages:/app/pages
+      - ./front-local/public:/app/public
+      # Ajoute d'autres dossiers si besoin (components, styles, etc.)

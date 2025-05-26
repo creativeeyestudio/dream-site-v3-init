@@ -8,6 +8,9 @@ up:
 down:
 	docker-compose down
 
+init-front-dev:
+	bash scripts/init-front-dev.sh
+
 build-dev:
 	bash scripts/build-dev.sh $(DEV_TAG)
 
