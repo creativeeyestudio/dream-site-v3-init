@@ -1,6 +1,0 @@
-services:
-  # FRONT DU PROJET
-  # -----------------------------------------------------------------
-  front:
-    volumes:
-      - ./front:/app/src
