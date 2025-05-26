@@ -1,10 +1,12 @@
 #!/bin/bash
 set -e
+source .env
 
 TAG=${1:-dev-latest}
-IMAGE="ghcr.io/yourorg/client-project:$TAG"
+IMAGE="$GHCR_NAMESPACE/$PROJECT_NAME:$TAG"
 
-echo "Creating dev image: $IMAGE"
-docker commit strapi-client $IMAGE
-echo "Pushing to GHCR..."
-docker push $IMAGE
+echo "📦 Commit image: $IMAGE"
+docker commit "$CONTAINER_NAME" "$IMAGE"
+
+echo "🚀 Pushing to GHCR..."
+docker push "$IMAGE"

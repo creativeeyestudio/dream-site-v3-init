@@ -1,0 +1,21 @@
+include .env
+DEV_TAG=dev-$(shell date +%Y%m%d%H%M)
+PROD_TAG ?= v1.0.0
+
+up:
+	docker-compose up -d
+
+down:
+	docker-compose down
+
+build-dev:
+	bash scripts/build-dev.sh $(DEV_TAG)
+
+build-prod:
+	bash scripts/build-prod.sh $(PROD_TAG)
+
+push-dev:
+	bash scripts/push.sh ghcr $(DEV_TAG)
+
+push-prod:
+	bash scripts/push.sh dockerhub $(PROD_TAG)

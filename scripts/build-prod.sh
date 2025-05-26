@@ -1,16 +1,17 @@
 #!/bin/bash
 set -e
+source .env
 
-VERSION=$1
-
-if [ -z "$VERSION" ]; then
+TAG=$1
+if [ -z "$TAG" ]; then
   echo "❌ Usage: ./build-prod.sh <version>"
   exit 1
 fi
 
-IMAGE="yourdockerhubuser/client-project:$VERSION"
+IMAGE="$DOCKERHUB_NAMESPACE/$PROJECT_NAME:$TAG"
 
-echo "Creating prod image: $IMAGE"
-docker commit strapi-client $IMAGE
-echo "Pushing to Docker Hub..."
-docker push $IMAGE
+echo "📦 Commit image: $IMAGE"
+docker commit "$CONTAINER_NAME" "$IMAGE"
+
+echo "🚀 Pushing to Docker Hub..."
+docker push "$IMAGE"
