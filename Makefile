@@ -16,9 +16,3 @@ build-dev:
 
 build-prod:
 	bash scripts/build-prod.sh $(PROD_TAG)
-
-push-dev:
-	bash scripts/push.sh ghcr $(DEV_TAG)
-
-push-prod:
-	bash scripts/push.sh dockerhub $(PROD_TAG)

@@ -24,12 +24,9 @@ if errorlevel 1 (
 
 :: Création du dossier src si besoin
 if not exist "../front-src" (
-    mkdir ../front-src
-    
     echo 📦 Copie du dossier src depuis le conteneur...
     docker cp %PROJECT_NAME%-front:/app/src ../front-src
 )
-
 
 :: Redémarrage du service Front
 echo 🔁 Redémarrage du service front avec le montage local...
