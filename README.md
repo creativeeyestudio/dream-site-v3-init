@@ -1,6 +1,6 @@
-# 🚀 Scripts PowerShell – Workflow Docker (Strapi + Next.js)
+# 🚀 Installation de l'infrastructure DreamSite
 
-Ce dépôt contient des scripts PowerShell pour automatiser l'installation, le développement, et la livraison d'un projet basé sur un noyau CMS Strapi et un front Next.js dans un environnement Docker. Compatible Windows.
+Ce dépôt contient des scripts PowerShell pour automatiser l'installation, le développement, et la livraison d'un projet basé sur l'infrastructure DreamSite dans un environnement Docker. Compatible Windows et Linux.
 
 ---
 
@@ -8,7 +8,7 @@ Ce dépôt contient des scripts PowerShell pour automatiser l'installation, le d
 
 - `init-front-dev`  
   Initialise un projet en environnement de développement :
-  - Copie les fichiers `src`, `pages`, `public`, etc. depuis le conteneur vers `./front-local`
+  - Copie le dossier `src`. depuis le conteneur vers `./front-local`
   - Redémarre le service front avec ces fichiers montés localement
 
 - `build-dev`  
@@ -61,5 +61,5 @@ GITHUB_REGISTRY=ghcr.io/ton-org-ou-user
 
 ---
 
-©️ OpenAI x Creative Eye Studio 😉
+©️ OpenAI x Creative Eye Studio
 ```

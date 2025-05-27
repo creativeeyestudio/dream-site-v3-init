@@ -1,14 +1,14 @@
 #!/bin/bash
 set -e
-source .env
+source ../.env
 
 FRONT_CONTAINER="${PROJECT_NAME}-front"
 
 echo "📁 Création du dossier front-local..."
-mkdir -p front-local
+mkdir -p ../front-local
 
 echo "📦 Copie du front depuis le conteneur..."
-docker cp $FRONT_CONTAINER:/app/src ./front-local/src
+docker cp $FRONT_CONTAINER:/app/src ../front-local/src
 
 # D'autres fichiers utiles
 # docker cp $FRONT_CONTAINER:/app/next.config.js ./front-local/next.config.js || true
