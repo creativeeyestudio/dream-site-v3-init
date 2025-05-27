@@ -6,7 +6,7 @@ if [ ! -f ../.env ]; then
   echo "❌ Fichier .env introuvable."
   exit 1
 fi
-source .env
+source ../.env
 
 TAG=${1:-dev-latest}
 

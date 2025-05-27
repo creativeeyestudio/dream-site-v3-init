@@ -23,24 +23,19 @@ if errorlevel 1 (
 )
 
 :: Création du dossier src si besoin
-if not exist "front-src" (
-    mkdir front-src
+if not exist "../front-src" (
+    mkdir ../front-src
+    
+    echo 📦 Copie du dossier src depuis le conteneur...
+    docker cp %PROJECT_NAME%-front:/app/src ../front-src
 )
 
-echo 📦 Copie du dossier src depuis le conteneur...
-docker cp %PROJECT_NAME%-front:/app/src ../front-src
-
-:: Création du override docker-compose
-echo 🔧 Génération du fichier docker-compose.override.yml
-(
-echo services:
-echo.  front:
-echo.    volumes:
-echo.      - ./front-src:/app/src
-) > docker-compose.override.yml
 
 :: Redémarrage du service Front
 echo 🔁 Redémarrage du service front avec le montage local...
 docker compose up -d --force-recreate front
+
+cd ../
+docker compose -f docker-compose.yml -f docker-compose.front-dev.yml up -d --build front
 
 echo ✅ Initialisation Front Dev terminée avec succès !
