@@ -1,32 +1,32 @@
-# Creating multi-stage build for production
+# --- Étape 1 : basée sur ton image de dev Strapi (commitée) ---
 ARG BASE_IMAGE
-FROM ${BASE_IMAGE} AS build
+FROM ${BASE_IMAGE} as dev
 
-RUN apk update && apk add --no-cache build-base gcc autoconf automake zlib-dev libpng-dev vips-dev git > /dev/null 2>&1
-ARG NODE_ENV=production
-ENV NODE_ENV=${NODE_ENV}
-
-WORKDIR /opt/
-COPY package.json yarn.lock ./
-RUN yarn global add node-gyp
-RUN yarn config set network-timeout 600000 -g && yarn install --production
-ENV PATH=/opt/node_modules/.bin:$PATH
-WORKDIR /opt/app
-COPY . .
-RUN yarn build
-
-# Creating final production image
+# --- Étape 2 : image prod propre et allégée ---
 FROM node:22-alpine
+
+# Dépendances système nécessaires à Strapi
 RUN apk add --no-cache vips-dev
+
+# Environnement
 ENV NODE_ENV=production
-ENV NODE_ENV=${NODE_ENV}
 WORKDIR /opt/
-COPY --from=build /opt/node_modules ./node_modules
+
+# Copy des dépendances Node
+COPY --from=dev /opt/node_modules ./node_modules
+
+# Copy du projet Strapi
 WORKDIR /opt/app
-COPY --from=build /opt/app ./
+COPY --from=dev /opt/app ./
+
+# Optionnel : yarn.lock pour audit
+COPY --from=dev /opt/app/yarn.lock ./yarn.lock
+
 ENV PATH=/opt/node_modules/.bin:$PATH
 
+# Permissions
 RUN chown -R node:node /opt/app
 USER node
+
 EXPOSE 1337
 CMD ["yarn", "start"]
