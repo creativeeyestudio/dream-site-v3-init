@@ -1,41 +1,65 @@
-# Infrastructure Dream Site
+# 🚀 Installation de l'infrastructure DreamSite
 
-Cette infrastructure Docker permet d'instancier un projet web à l'aide de la suite Dream Site de Creative Eye Studio
-
-## Installation du projet
-
-### Clonage du projet
-
-Commencez par cloner les fichiers d'instance sur votre machine à l'aide de la commande ci-dessous
-```git clone https://github.com/creativeeyestudio/dream-site-v3-init.git ./project-name```
+Ce dépôt contient des scripts PowerShell pour automatiser l'installation, le développement, et la livraison d'un projet basé sur l'infrastructure DreamSite dans un environnement Docker. Compatible Windows et Linux.
 
 ---
 
-## Configuration de l'instance Dev
+## 📁 Contenu des scripts
 
-### Fichier .env
-Modifiez la variable `PROJECT_NAME` avec le nom du projet.
-> Exemple : `PROJECT_NAME=project-name`
+- `init-front-dev`  
+  Initialise un projet en environnement de développement :
+  - Copie le dossier `src`. depuis le conteneur vers `./front-local`
+  - Redémarre le service front avec ces fichiers montés localement
 
-### Fichers Dockerfile
-Faites de même dans les dockerfiles en remplaçant 'NOM-DU-PROJET' par la variable donnée
-> Exemple : `FROM project-name-front AS builder`
+- `build-dev`  
+  Build une image de développement à partir du projet actuel, puis la push vers le GitHub Container Registry (`ghcr.io`).
 
-### Lancement de l'instance
-Lancez ensuite la commande suivante selon votre système d'exploitation :
-* Windows : `./init-dev.bat`
-* Mac : `./init-dev.sh`
+- `build-prod`  
+  Build une image de production taguée (via paramètre) et la push vers Docker Hub.
 
----
-
-## Configuration du Git du Projet
-
-> _A venir..._
+- `push`  
+  Permet de push n'importe quelle image Docker vers un registry en spécifiant son nom et son tag.
 
 ---
 
-## Besoin d'aide
+## ✅ Prérequis
 
-Pour toute demande complémentaire
-* contact@creative-eye.fr
-* [Site de Creative Eye Studio](https://creative-eye.fr/fr)
+- Docker installé (et accessible depuis PowerShell)
+- PowerShell (5+ ou Core)
+
+```env
+PROJECT_NAME=project-name
+DOCKERHUB_USER=tonusername
+DOCKERHUB_REPO=nom-du-depot
+GITHUB_REGISTRY=ghcr.io/ton-org-ou-user
+```
+
+---
+
+## 🧪 Exemples d’utilisation
+
+```powershell
+# Initialiser le projet en mode dev
+.\init-front-dev.ps1
+
+# Construire et push l’image dev vers GitHub Container Registry
+.\build-dev.ps1
+
+# Construire et push l’image prod vers Docker Hub (avec tag)
+.\build-prod.ps1 -prodTag v1.0.0
+
+# Push manuel d’une image
+.\push.ps1 -imageName mon-image -tag latest
+```
+
+---
+
+## 🧠 Bonnes pratiques
+
+- Crée ton projet client depuis un **template Git** propre (avec ce set de scripts inclus).
+- Utilise `docker-compose.front-dev.yml` pour adapter le comportement local sans impacter le projet.
+
+---
+
+©️ OpenAI x Creative Eye Studio
+```
