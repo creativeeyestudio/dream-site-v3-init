@@ -1,0 +1,10 @@
+services:
+  # FRONT DU PROJET
+  # -----------------------------------------------------------------
+  front:
+    image: kevinad/${PROJECT_NAME}-front:vX.X.X
+
+  # CONSOLE CMS
+  # -----------------------------------------------------------------
+  cms:
+    image: kevinad/${PROJECT_NAME}-cms:vX.X.X
