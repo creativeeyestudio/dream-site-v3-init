@@ -8,6 +8,9 @@ up:
 down:
 	docker-compose down
 
+init-dev:
+	bash scripts/init-dev.sh
+
 init-front-dev:
 	bash scripts/init-front-dev.sh
 
