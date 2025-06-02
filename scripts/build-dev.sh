@@ -10,17 +10,6 @@ source ../.env
 
 TAG=${1:-dev-latest}
 
-# FRONT
-# ----------------------------------------------
-FRONT_CONTAINER="${PROJECT_NAME}-front"
-FRONT_IMAGE="$GHCR_NAMESPACE/$PROJECT_NAME-front:$TAG"
-
-echo "📦 Commit de l'image Front : $FRONT_IMAGE"
-docker commit "$FRONT_CONTAINER" "$FRONT_IMAGE"
-
-echo "🚀 Push de l'image Front vers le GHCR..."
-docker push "$FRONT_IMAGE"
-
 # CMS
 # ----------------------------------------------
 CMS_CONTAINER="${PROJECT_NAME}-cms"

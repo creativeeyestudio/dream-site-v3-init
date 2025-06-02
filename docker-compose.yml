@@ -1,21 +1,6 @@
 name: ${PROJECT_NAME}
 
 services:
-  # FRONT DU PROJET
-  # -----------------------------------------------------------------
-  front:
-    image: kevinad/dreamsite-web-front
-    container_name: ${PROJECT_NAME}-front # Nom de l'image
-    restart: always
-    ports:
-      - "3000:3000"  # Expose Next.js
-    environment:
-      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}  # URL de Strapi
-      - NEXT_PUBLIC_API_TOKEN=${NEXT_PUBLIC_API_TOKEN}
-    depends_on:
-      - cms  # Démarre après Strapi
-      - cms_db
-
   # CONSOLE CMS
   # -----------------------------------------------------------------
   cms:

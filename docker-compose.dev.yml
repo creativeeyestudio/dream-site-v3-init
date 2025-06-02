@@ -1,11 +1,6 @@
 name: ${PROJECT_NAME}
 
 services:
-  # FRONT DU PROJET
-  # -----------------------------------------------------------------
-  front:
-    image: ${GHCR_NAMESPACE}/${PROJECT_NAME}-front:dev-latest
-
   # CONSOLE CMS
   # -----------------------------------------------------------------
   cms:

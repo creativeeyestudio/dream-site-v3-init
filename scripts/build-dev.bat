@@ -21,17 +21,8 @@ if "%TAG%"=="" set TAG=dev-latest
 
 echo 🔄 Utilisation du tag : %TAG%
 
-:: FRONT
-:: ----------------------------------------------
-set IMAGE=%GHCR_NAMESPACE%/%PROJECT_NAME%-front:%TAG%
-echo 📦 Commit de l'image Front : %IMAGE%
-docker commit %PROJECT_NAME%-front %IMAGE%
-
-echo 🚀 Push de l'image Front vers GHCR...
-docker push %IMAGE%
-
 :: CMS
-:: ----------------------------------------------
+:: -------------------------------------------------
 set IMAGE=%GHCR_NAMESPACE%/%PROJECT_NAME%-cms:%TAG%
 echo 📦 Commit de l'image CMS : %IMAGE%
 docker commit %PROJECT_NAME%-cms %IMAGE%

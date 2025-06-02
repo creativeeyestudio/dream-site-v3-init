@@ -1,4 +1,0 @@
-services:
-  front:
-    volumes:
-      - ./front-src:/app/src

@@ -15,18 +15,6 @@ fi
 
 TAG=$1
 
-# FRONT
-# ----------------------------------------------
-DEV_FRONT_IMAGE="$GHCR_NAMESPACE/$PROJECT_NAME-front:dev-latest"
-PROD_FRONT_IMAGE="$DOCKERHUB_USER/$PROJECT_NAME-front:$TAG"
-
-docker build \
-  -f ../docker/front/Dockerfile \
-  --build-arg BASE_IMAGE=$DEV_FRONT_IMAGE \
-  -t $PROD_FRONT_IMAGE .
-
-docker push $PROD_FRONT_IMAGE
-
 # CMS
 # ----------------------------------------------
 DEV_CMS_IMAGE="$GHCR_NAMESPACE/$PROJECT_NAME-cms:dev-latest"
