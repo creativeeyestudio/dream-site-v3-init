@@ -41,9 +41,3 @@ docker compose up -d --build || {
   echo "❌ Docker n’a pas démarré correctement."
   exit 1
 }
-
-# 🚀 Lancement du Front
-echo ""
-echo "🚀 Lancement du Front"
-cd front
-npm install

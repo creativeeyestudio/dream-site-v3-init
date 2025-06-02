@@ -44,10 +44,3 @@ if errorlevel 1 (
     echo ❌ Docker n’a pas démarré correctement.
     exit /b 1
 )
-
-:: 🚀 Lancement du Front
-echo.
-echo 🚀 Lancement du Front
-cd front
-npm install
-npm run dev

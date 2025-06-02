@@ -1,6 +1,20 @@
 name: ${PROJECT_NAME}
 
 services:
+  # FRONT
+  # -----------------------------------------------------------------
+  front:
+    build:
+      context: ./front
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./front:/app
+      - /front/app/node_modules # Empêche les conflits entre node_modules host/container
+    environment:
+      - NODE_ENV=development
+
   # CONSOLE CMS
   # -----------------------------------------------------------------
   cms:
