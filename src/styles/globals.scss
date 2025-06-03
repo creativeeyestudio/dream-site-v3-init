@@ -1,0 +1,20 @@
+// Abstract
+@import './abstract/variables';
+@import './abstract/mixins';
+
+// Base
+@import './base/reset';
+
+// Components
+@import './components/buttons';
+@import './components/heroscreen';
+@import './components/parallax';
+
+// Layouts
+@import './layouts/header';
+@import './layouts/footer';
+@import './layouts/gallery';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
