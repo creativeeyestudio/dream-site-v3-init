@@ -11,7 +11,7 @@ services:
       - '3000:3000'
     volumes:
       - ./front:/app
-      - /front/app/node_modules # Empêche les conflits entre node_modules host/container
+      - /app/node_modules # Empêche les conflits entre node_modules host/container
     environment:
       - NODE_ENV=development
 
