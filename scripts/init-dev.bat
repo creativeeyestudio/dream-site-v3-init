@@ -17,23 +17,29 @@ for /f "usebackq tokens=* delims=" %%a in ("%ENV_PATH%") do (
     )
 )
 
-:: 📁 Vérification du projet Front
+:: 🛠️  Vérification du projet Front (Next.js)
 echo.
-echo 🛠️  Vérification du projet Front (Next.js)
 cd ..
 
-if exist "front" (
-    echo 📁 Le dossier 'front' existe déjà. Aucun clonage effectué.
-) else (
-    echo 📥 Clonage du projet Front...
-    git clone https://github.com/creativeeyestudio/dream-site-v3-front-web.git front
-    if errorlevel 1 (
-        echo ❌ Échec du clonage du front.
-        exit /b 1
-    )
+set REMOTE_NAME=next-core
+set REMOTE_URL=https://github.com/creativeeyestudio/dream-site-v3-front-web.git
+set SUBTREE_DIR=front
+set BRANCH=main
 
-    echo 🧹 Suppression de l'historique Git pour intégration locale...
-    rmdir /s /q front\.git
+:: 🔗 Ajouter le remote si manquant
+git remote | findstr /b /c:"%REMOTE_NAME%" >nul
+if errorlevel 1 (
+    echo 🔗 Ajout du remote "%REMOTE_NAME%"...
+    git remote add %REMOTE_NAME% %REMOTE_URL%
+)
+
+:: 📁 Vérifier si front/ existe
+if exist "%SUBTREE_DIR%\" (
+    echo 🔁 Le dossier '%SUBTREE_DIR%' existe déjà. Mise à jour via git subtree...
+    git subtree pull --prefix=%SUBTREE_DIR% %REMOTE_NAME% %BRANCH% --squash
+) else (
+    echo 📥 Ajout initial du projet Front via git subtree...
+    git subtree add --prefix=%SUBTREE_DIR% %REMOTE_NAME% %BRANCH% --squash
 )
 
 :: 🐳 Lancement du Back (Docker)
