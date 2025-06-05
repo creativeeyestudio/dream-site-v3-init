@@ -1,0 +1,12 @@
+services:
+  nextjs-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    volumes:
+      - .:/app
+      - /app/node_modules # Empêche les conflits entre node_modules host/container
+    environment:
+      - NODE_ENV=development

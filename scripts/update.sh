@@ -29,6 +29,8 @@ if ! git subtree pull --prefix="$SUBTREE_DIR" "$REMOTE_NAME" "$BRANCH" --squash;
   exit 1
 fi
 
+cd ..
+
 echo
 echo "🐳 Mise à jour du Back (Docker)..."
 if ! docker compose up -d --build; then

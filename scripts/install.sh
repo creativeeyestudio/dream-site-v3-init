@@ -2,7 +2,9 @@
 set -e
 
 # 📦 Charger les variables d'environnement depuis ../.env
-ENV_PATH="../.env"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ENV_PATH="$SCRIPT_DIR/../.env"
+
 if [ ! -f "$ENV_PATH" ]; then
   echo "❌ Le fichier .env est introuvable dans le dossier parent."
   exit 1
@@ -18,8 +20,6 @@ done < <(grep -E '^[a-zA-Z_][a-zA-Z_0-9]*=' "$ENV_PATH")
 # 📁 Vérification / installation du projet Front
 echo ""
 echo "🛠️  Vérification du projet Front (Next.js)"
-
-cd ..
 
 if [ -d "front" ]; then
   echo "📁 Le dossier front existe déjà."
