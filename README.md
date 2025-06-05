@@ -29,4 +29,3 @@ PROJECT_NAME=project-name
 
 ---
 ©️ OpenAI x Creative Eye Studio
-```
