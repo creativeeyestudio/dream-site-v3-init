@@ -1,6 +1,0 @@
-# Ignorer les fichiers inutiles
-node_modules/
-build/
-.env
-.next/
-*.log
