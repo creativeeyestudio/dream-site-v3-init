@@ -14,14 +14,16 @@ Ce dépôt contient les scripts pour automatiser l'installation, le développeme
 
 - `build`  
   Instancie le projet pour la mise en prod
-
 ---
 
 ## ✅ Prérequis
 
 - Docker installé
 
-```env
+## Config
+Rien de plus simple ! Il suffit d'aller dans le fichier .env et de changer la variable ci-dessous avec le nom du projet. Et ensuite lancer la command d'installation
+
+```
 PROJECT_NAME=project-name
 ```
 
