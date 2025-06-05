@@ -1,20 +1,19 @@
 name: ${PROJECT_NAME}
 
 services:
-  # FRONT DU PROJET
+  # FRONT
   # -----------------------------------------------------------------
   front:
-    image: kevinad/dreamsite-web-front
-    container_name: ${PROJECT_NAME}-front # Nom de l'image
-    restart: always
+    build:
+      context: ./front
+      dockerfile: Dockerfile
     ports:
-      - "3000:3000"  # Expose Next.js
+      - '3000:3000'
+    volumes:
+      - ./front:/app
+      - /app/node_modules # Empêche les conflits entre node_modules host/container
     environment:
-      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}  # URL de Strapi
-      - NEXT_PUBLIC_API_TOKEN=${NEXT_PUBLIC_API_TOKEN}
-    depends_on:
-      - cms  # Démarre après Strapi
-      - cms_db
+      - NODE_ENV=development
 
   # CONSOLE CMS
   # -----------------------------------------------------------------

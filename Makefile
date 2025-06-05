@@ -1,21 +1,8 @@
-include .env
-DEV_TAG=dev-$(shell date +%Y%m%d%H%M)
-PROD_TAG ?= v1.0.0
+install:
+	bash scripts/install.sh
 
-up:
-	docker-compose up -d
+update:
+	bash scripts/update.sh
 
-down:
-	docker-compose down
-
-init-dev:
-	bash scripts/init-dev.sh
-
-init-front-dev:
-	bash scripts/init-front-dev.sh
-
-build-dev:
-	bash scripts/build-dev.sh $(DEV_TAG)
-
-build-prod:
-	bash scripts/build-prod.sh $(PROD_TAG)
+build:
+	bash scripts/build.sh
