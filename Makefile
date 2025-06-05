@@ -1,9 +1,3 @@
-up:
-	docker-compose up -d
-
-down:
-	docker-compose down
-
 install:
 	bash scripts/install.sh
 
