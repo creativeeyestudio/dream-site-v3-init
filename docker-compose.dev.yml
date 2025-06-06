@@ -1,7 +1,0 @@
-name: ${PROJECT_NAME}
-
-services:
-  # CONSOLE CMS
-  # -----------------------------------------------------------------
-  cms:
-    image: ${GHCR_NAMESPACE}/${PROJECT_NAME}-cms:dev-latest
