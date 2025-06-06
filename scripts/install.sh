@@ -10,12 +10,12 @@ if [ ! -f "$ENV_PATH" ]; then
   exit 1
 fi
 
-# Exporter chaque variable présente dans le .env
+# Exporter chaque variable présente dans le .env, en ignorant les lignes commentées et vides
 while IFS='=' read -r key value; do
   if [[ $key =~ ^[a-zA-Z_][a-zA-Z_0-9]*$ ]]; then
     export "$key=$value"
   fi
-done < <(grep -E '^[a-zA-Z_][a-zA-Z_0-9]*=' "$ENV_PATH")
+done < <(grep -v '^#' "$ENV_PATH" | grep -E '^[a-zA-Z_][a-zA-Z_0-9]*=')
 
 # 📁 Vérification / installation du projet Front
 echo ""
@@ -36,8 +36,10 @@ fi
 
 # 🐳 Lancement du Back
 echo ""
-echo "🐳 Lancement du Back (Docker)"
-docker compose up -d --build || {
+echo "🐳 Lancement du Back (Docker)..."
+if docker compose up -d --build; then
+  echo "✅ Docker a démarré avec succès."
+else
   echo "❌ Docker n’a pas démarré correctement."
   exit 1
-}
+fi
