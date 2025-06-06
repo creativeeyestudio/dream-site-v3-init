@@ -4,7 +4,7 @@ services:
   # FRONT
   # -----------------------------------------------------------------
   front:
-    image: kevinad/dreamsite-web-front
+    image: kevinad/dreamsite-front-web
     container_name: ${PROJECT_NAME}-front # Nom de l'image
     build:
       context: ./front
@@ -12,8 +12,9 @@ services:
     ports:
       - '3000:3000'
     volumes:
-      - ./front:/app
-      - /app/node_modules # Empêche les conflits entre node_modules host/container
+      - ./front/src:/app/src
+      - /app/node_modules
+      - ./front/package.json:/app/package.json
     environment:
       - NODE_ENV=development
       - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
