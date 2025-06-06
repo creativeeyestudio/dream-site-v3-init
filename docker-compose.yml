@@ -4,6 +4,8 @@ services:
   # FRONT
   # -----------------------------------------------------------------
   front:
+    image: kevinad/dreamsite-web-front
+    container_name: ${PROJECT_NAME}-front # Nom de l'image
     build:
       context: ./front
       dockerfile: Dockerfile
@@ -14,6 +16,8 @@ services:
       - /app/node_modules # Empêche les conflits entre node_modules host/container
     environment:
       - NODE_ENV=development
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+      - NEXT_PUBLIC_API_TOKEN=${NEXT_PUBLIC_API_TOKEN}
 
   # CONSOLE CMS
   # -----------------------------------------------------------------
@@ -56,6 +60,7 @@ services:
   # -----------------------------------------------------------------
   maildev:
     image: maildev/maildev
+    container_name: ${PROJECT_NAME}-maildev # Nom de l'image
     restart: always
     ports:
       - "1080:1080"
