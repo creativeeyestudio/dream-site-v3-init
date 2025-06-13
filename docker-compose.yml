@@ -1,61 +1,16 @@
 name: ${PROJECT_NAME}
 
 services:
-  # FRONT
+  # MONGO DB
   # -----------------------------------------------------------------
-  front:
-    image: kevinad/dreamsite-front-web
-    container_name: ${PROJECT_NAME}-front # Nom de l'image
-    build:
-      context: ./front
-      dockerfile: Dockerfile
-    ports:
-      - '3000:3000'
+  mongo:
+    image: mongo:8
+    container_name: "${PROJECT_NAME}-mongo"
+    restart: unless-stopped
     volumes:
-      - ./front/src:/app/src
-      - /app/node_modules
-      - ./front/package.json:/app/package.json
-    environment:
-      - NODE_ENV=development
-      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
-      - NEXT_PUBLIC_API_TOKEN=${NEXT_PUBLIC_API_TOKEN}
-
-  # CONSOLE CMS
-  # -----------------------------------------------------------------
-  cms:
-    image: kevinad/dreamsite-cms
-    container_name: ${PROJECT_NAME}-cms # Nom de l'image
-    restart: always
+      - mongo-data:/data/db
     ports:
-      - "1337:1337"  # Expose Strapi
-    environment:
-      - DATABASE_CLIENT=${DATABASE_CLIENT}
-      - DATABASE_HOST=${DATABASE_HOST}
-      - DATABASE_PORT=${DATABASE_PORT}
-      - DATABASE_NAME=${DATABASE_NAME}
-      - DATABASE_USERNAME=${DATABASE_USERNAME}
-      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
-      - JWT_SECRET=${JWT_SECRET}
-      - APP_KEYS=${APP_KEYS}
-      - API_TOKEN_SALT=${API_TOKEN_SALT}
-      - ADMIN_JWT_SECRET=${ADMIN_JWT_SECRET}
-      - TRANSFER_TOKEN_SALT=${TRANSFER_TOKEN_SALT}
-    depends_on:
-      - cms_db  # Démarre après MySQL
-
-  cms_db:
-    image: mysql:8.0
-    container_name: ${PROJECT_NAME}-db # Nom de l'image
-    restart: always
-    ports:
-      - "3306:3306"  # Expose MySQL
-    environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - MYSQL_DATABASE=${DATABASE_NAME}
-      - MYSQL_USER=${DATABASE_USERNAME}
-      - MYSQL_PASSWORD=${DATABASE_PASSWORD}
-    volumes:
-      - mysql_data:/var/lib/mysql  # Persistance des données
+      - "27017:27017" 
 
   # MAILDEV
   # -----------------------------------------------------------------
@@ -72,7 +27,7 @@ services:
       - MAILDEV_SMTP_PORT=1025
 
 volumes:
-  mysql_data:
+  mongo-data:
 
 networks:
   ${PROJECT_NAME}-network:
