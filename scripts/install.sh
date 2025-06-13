@@ -1,45 +1,11 @@
 #!/bin/bash
+
 set -e
 
-# 📦 Charger les variables d'environnement depuis ../.env
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ENV_PATH="$SCRIPT_DIR/../.env"
+echo "📦 Clonage des projets..."
 
-if [ ! -f "$ENV_PATH" ]; then
-  echo "❌ Le fichier .env est introuvable dans le dossier parent."
-  exit 1
-fi
+[ -d ./front ] || git clone https://github.com/creativeeyestudio/dream-site-v3-front-web.git ./front
+[ -d ./back ]  || git clone https://github.com/creativeeyestudio/dream-site-v3-cms.git ./back
 
-# Exporter chaque variable présente dans le .env, en ignorant les lignes commentées et vides
-while IFS='=' read -r key value; do
-  if [[ $key =~ ^[a-zA-Z_][a-zA-Z_0-9]*$ ]]; then
-    export "$key=$value"
-  fi
-done < <(grep -v '^#' "$ENV_PATH" | grep -E '^[a-zA-Z_][a-zA-Z_0-9]*=')
-
-# 📁 Vérification / installation du projet Front
-echo ""
-echo "🛠️  Vérification du projet Front (Next.js)"
-
-if [ -d "front" ]; then
-  echo "📁 Le dossier front existe déjà."
-else
-  echo "📥 Clonage du projet Front..."
-  git clone https://github.com/creativeeyestudio/dream-site-v3-front-web.git front || {
-    echo "❌ Échec du clonage du front."
-    exit 1
-  }
-
-  echo "🧹 Suppression de l'historique Git pour intégration locale..."
-  rm -rf front/.git
-fi
-
-# 🐳 Lancement du Back
-echo ""
-echo "🐳 Lancement du Back (Docker)..."
-if docker compose up -d --build; then
-  echo "✅ Docker a démarré avec succès."
-else
-  echo "❌ Docker n’a pas démarré correctement."
-  exit 1
-fi
+echo "🚀 Lancement de l'environnement de développement"
+docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build
