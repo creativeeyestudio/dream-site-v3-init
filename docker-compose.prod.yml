@@ -1,0 +1,22 @@
+version: "3.9"
+
+services:
+  front:
+    image: "${PROJECT_NAME}-front:latest"
+    restart: unless-stopped
+    ports:
+      - "80:3000"
+    environment:
+      - NODE_ENV=production
+
+  back:
+    image: "${PROJECT_NAME}-back:latest"
+    restart: unless-stopped
+    ports:
+      - "8080:3000"
+    environment:
+      - NODE_ENV=production
+      - PAYLOAD_SECRET=${PAYLOAD_SECRET}
+      - MONGODB_URI=${MONGODB_URI}
+    depends_on:
+      - mongo
