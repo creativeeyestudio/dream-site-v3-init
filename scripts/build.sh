@@ -2,34 +2,23 @@
 
 set -e
 
-# -- Étape 1 : Saisie --
-read -p "Nom du conteneur FRONT : " FRONT_CONTAINER
-read -p "Nom du conteneur CMS : " CMS_CONTAINER
+# Variables
+FRONT_IMAGE="kevinad/front:latest"
+BACK_IMAGE="kevinad/back:latest"
 
-# -- Étape 2 : Commit (image depuis conteneur) --
-docker commit "$FRONT_CONTAINER" "${FRONT_CONTAINER}-image"
-docker commit "$CMS_CONTAINER" "${CMS_CONTAINER}-image"
+echo "🔨 Build de l'image Front (Next.js)..."
+docker build -t $FRONT_IMAGE ./front
 
-# -- Étape 3 : Build images prod --
-docker build \
-  --build-arg BASE_IMAGE="${FRONT_CONTAINER}-image" \
-  -f ../docker/front/Dockerfile \
-  -t "$FRONT_CONTAINER" .
+echo "🔨 Build de l'image Back (Payload CMS)..."
+docker build -t $BACK_IMAGE ./back
 
-docker build \
-  --build-arg BASE_IMAGE="${CMS_CONTAINER}-image" \
-  -f ../docker/cms/Dockerfile \
-  -t "$CMS_CONTAINER" .
+echo "🔑 Connexion à Docker Hub..."
+docker login
 
-# -- Étape 4 : Tag & Push --
-docker tag "$FRONT_CONTAINER" "kevinad/${FRONT_CONTAINER}:latest"
-docker tag "$CMS_CONTAINER" "kevinad/${CMS_CONTAINER}:latest"
+echo "🚀 Push de l'image Front vers Docker Hub..."
+docker push $FRONT_IMAGE
 
-docker push "kevinad/${FRONT_CONTAINER}:latest"
-docker push "kevinad/${CMS_CONTAINER}:latest"
+echo "🚀 Push de l'image Back vers Docker Hub..."
+docker push $BACK_IMAGE
 
-# -- Étape 5 : Nettoyage --
-echo "🧹 Suppression des images Docker inactives..."
-docker image prune -f
-
-echo "✅ Workflow terminé avec succès."
+echo "✅ Build et push terminés."
