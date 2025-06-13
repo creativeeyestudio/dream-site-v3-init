@@ -1,15 +1,15 @@
 #!/bin/bash
 
 set -e
+source .env
 
-# Variables
-FRONT_IMAGE="kevinad/front:latest"
-BACK_IMAGE="kevinad/back:latest"
+FRONT_IMAGE="${PROJECT_NAME}-front:latest"
+BACK_IMAGE="${PROJECT_NAME}-back:latest"
 
-echo "🔨 Build de l'image Front (Next.js)..."
+echo "🔨 Build de l'image Front..."
 docker build -t $FRONT_IMAGE ./front
 
-echo "🔨 Build de l'image Back (Payload CMS)..."
+echo "🔨 Build de l'image Back..."
 docker build -t $BACK_IMAGE ./back
 
 echo "🔑 Connexion à Docker Hub..."
