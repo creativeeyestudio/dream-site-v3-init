@@ -1,32 +1,41 @@
 services:
   front:
+    container_name: "${PROJECT_NAME}-front"
+    image: kevinad/dreamsite-web-front
     build:
       context: ./front
-      dockerfile: Dockerfile.dev
-    container_name: "${PROJECT_NAME}-name-front"
+      dockerfile: Dockerfile
     ports:
       - "3000:3000"
     volumes:
-      - ./front:/app
+      - ./front/src:/app/src
+      - ./front/public:/app/public
+      - ./front/package.json:/app/package.json
+      - ./front/package-lock.json:/app/package-lock.json
+      - ./front/next.config.js:/app/next.config.js
+      - ./front/tsconfig.json:/app/tsconfig.json
       - /app/node_modules
-    environment:
-      - NODE_ENV=development
+    env_file:
+      - .env
     depends_on:
       - back
 
   back:
+    container_name: "${PROJECT_NAME}-back"
+    image: kevinad/dreamsite-cms
     build:
       context: ./back
-      dockerfile: Dockerfile.dev
-    container_name: "${PROJECT_NAME}-name-back"
+      dockerfile: Dockerfile
     ports:
       - "3100:3000"
     volumes:
-      - ./back:/app
+      - ./back/src:/app/src
+      - ./back/package.json:/app/package.json
+      - ./back/package-lock.json:/app/package-lock.json
+      - ./back/pnpm-lock.json:/app/pnpm-lock.json
+      - ./back/tsconfig.json:/app/tsconfig.json
       - /app/node_modules
-    environment:
-      - NODE_ENV=development
-      - PAYLOAD_SECRET=devsecret
-      - MONGODB_URI=mongodb://mongo:27017/payload
+    env_file:
+      - .env
     depends_on:
       - mongo
