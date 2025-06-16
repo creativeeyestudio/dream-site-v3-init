@@ -4,7 +4,7 @@ services:
     image: kevinad/dreamsite-web-front
     build:
       context: ./front
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     ports:
       - "3000:3000"
     volumes:
@@ -14,10 +14,9 @@ services:
       - ./front/package-lock.json:/app/package-lock.json
       - ./front/next.config.js:/app/next.config.js
       - ./front/tsconfig.json:/app/tsconfig.json
-      - ./front/env.local:/app/.env.local
       - /app/node_modules
-    environment:
-      - NODE_ENV=development
+    env_file:
+      - .env
     depends_on:
       - back
 
@@ -26,7 +25,7 @@ services:
     image: kevinad/dreamsite-cms
     build:
       context: ./back
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     ports:
       - "3100:3000"
     volumes:
@@ -36,9 +35,7 @@ services:
       - ./back/pnpm-lock.json:/app/pnpm-lock.json
       - ./back/tsconfig.json:/app/tsconfig.json
       - /app/node_modules
-    environment:
-      - NODE_ENV=development
-      - PAYLOAD_SECRET=devsecret
-      - MONGODB_URI=mongodb://mongo:27017/payload
+    env_file:
+      - .env
     depends_on:
       - mongo
