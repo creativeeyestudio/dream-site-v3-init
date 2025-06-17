@@ -54,13 +54,16 @@ const Navigation = async ({ menuId, locale, classes }: NavigationProps) => {
 
   const renderImages = (items: MenuItem[]) => (
     <div>
-      {items.map((item, index) => (
-        item.image ? <Image
-          src={item.image.url}
-          alt={item.image.alt ?? ""}
-          key={index}
-          fill={true}
-        /> : <></>
+      {items.map((item) => (
+        item.image && (
+          <Image
+            key={item.image.url} // Utiliser une valeur unique si possible
+            src={item.image.url}
+            alt={item.image.alt ?? ""}
+            fill
+            style={{ objectFit: "cover" }}
+          />
+        )
       ))}
     </div>
   );
