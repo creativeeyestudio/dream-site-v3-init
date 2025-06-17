@@ -1,5 +1,6 @@
 FROM node:22.12.0-alpine
 
+RUN apt-get update && apt-get install -y libvips-dev
 WORKDIR /app
 
 RUN npm install -g pnpm

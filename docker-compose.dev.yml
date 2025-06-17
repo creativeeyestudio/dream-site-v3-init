@@ -24,11 +24,7 @@ services:
     ports:
       - "3100:3000"
     volumes:
-      - ./back/src:/app/src
-      - ./back/package.json:/app/package.json
-      - ./back/package-lock.json:/app/package-lock.json
-      - ./back/pnpm-lock.json:/app/pnpm-lock.json
-      - ./back/tsconfig.json:/app/tsconfig.json
+      - ./back:/app
       - /app/node_modules
     env_file:
       - .env
