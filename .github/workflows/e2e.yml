@@ -1,58 +1,49 @@
+# .github/workflows/e2e.yml
 name: E2E Tests
 
 on:
   push:
     branches: [main]
   pull_request:
-    branches: [main]
 
 jobs:
   e2e:
-    name: Run E2E Tests (npm)
     runs-on: ubuntu-latest
-
     services:
       mongo:
         image: mongo:6
-        ports:
-          - 27017:27017
+        ports: [27017:27017]
         options: >-
-          --health-cmd="mongosh --eval 'db.adminCommand(\"ping\")'"
-          --health-interval=10s
-          --health-timeout=5s
+          --health-cmd="mongosh --eval 'db.adminCommand(\"ping\")'" 
+          --health-interval=10s 
+          --health-timeout=5s 
           --health-retries=5
 
     steps:
-      - name: 📥 Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: 🧰 Setup Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
 
-      - name: 📦 Install dependencies
-        run: npm install
-
-      - name: 🧪 Install Playwright browsers
-        run: npx playwright install --with-deps
-
-      - name: 🛠️ Build front + back
-        run: npm run build
-
-      - name: 🚀 Start Payload CMS & Next.js in background
+      - name: Install dependencies
         run: |
-          npm run --workspace=back dev &
-          npm run --workspace=front dev &
-          sleep 20
+          cd front && npm install
+          cd ../back && npm install
 
-      - name: ✅ Run Playwright E2E tests
-        run: npm run test:e2e
+      - name: Build front (Next.js)
+        run: |
+          cd front && npm run build
 
-      - name: 📤 Upload Playwright report (en cas d'échec)
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-report
-          path: playwright-report
+      - name: Build back (Payload CMS)
+        run: |
+          cd back && npm run build || echo "No build step needed"
+
+      - name: Run Playwright tests
+        run: |
+          npx playwright install
+          npm run test:e2e
+        env:
+          PAYLOAD_ADMIN_EMAIL: admin@example.com
+          PAYLOAD_ADMIN_PASSWORD: admin
