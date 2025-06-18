@@ -8,7 +8,7 @@ on:
 
 jobs:
   e2e:
-    name: Run E2E Tests
+    name: Run Playwright E2E
     runs-on: ubuntu-latest
 
     services:
@@ -23,39 +23,39 @@ jobs:
           --health-retries=5
 
     steps:
-      - name: Checkout code
+      - name: 📥 Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: 🧰 Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'pnpm'
 
-      - name: Install pnpm
+      - name: 📦 Install pnpm
         uses: pnpm/action-setup@v2
         with:
           version: 8
 
-      - name: Install dependencies
+      - name: 📦 Install dependencies
         run: pnpm install
 
-      - name: Install Playwright dependencies
+      - name: 🧪 Install Playwright browsers
         run: npx playwright install --with-deps
 
-      - name: Build apps
+      - name: 🛠️ Build apps
         run: pnpm build
 
-      - name: Start front & back in background
+      - name: 🚀 Start Payload CMS & Next.js in background
         run: |
-          pnpm --filter back dev &    # Payload
-          pnpm --filter front dev &   # Next.js
-          sleep 15                    # Attendre que les serveurs montent
+          pnpm --filter back dev &   # Payload CMS
+          pnpm --filter front dev &  # Next.js
+          sleep 20                   # attendre que les serveurs soient prêts
 
-      - name: Run E2E tests
+      - name: ✅ Run Playwright E2E tests
         run: pnpm test:e2e
 
-      - name: Upload Playwright report (si besoin)
+      - name: 📤 Upload Playwright HTML report (en cas d’échec)
         if: always()
         uses: actions/upload-artifact@v4
         with:
