@@ -1,6 +1,6 @@
 import { getHomePage } from "@/api/pages";
 import { notFound } from "next/navigation";
-import { PageContentProps } from "@/interfaces/page";
+import { PageProps } from "@/interfaces/page";
 import ContentPageItems from "@/components/layout/ContentPageItems";
 import { Metadata } from "next";
 import { headers } from "next/headers";
@@ -12,9 +12,10 @@ export type PageHomeParams = Promise<{
 export default async function HomePage(props: { params: PageHomeParams }) {
   const params = await props.params;
 
-  const page: PageContentProps = await getHomePage(params.locale);
+  const page: PageProps = await getHomePage(params.locale);
+  const doc = page.docs?.[0];
 
-  return page ? <ContentPageItems blocks={page.content.layout} /> : notFound();
+  return doc ? <ContentPageItems blocks={doc.content.layout} /> : notFound();
 }
 
 // SEO dynamique
@@ -23,29 +24,30 @@ export async function generateMetadata(props: {
 }): Promise<Metadata> {
   const reqHeaders = await headers();
   const params = await props.params;
-  const page: PageContentProps | null = await getHomePage(params.locale);
+  const page: PageProps | null = await getHomePage(params.locale);
+  const doc = page?.docs?.[0];
 
-  if (!page) {
+  if (!doc) {
     return {
       title: "Page introuvable",
     };
   }
 
   return {
-    title: `≻ ${page.meta.title ?? page.title}`,
-    description: page.meta.description ?? "",
+    title: `≻ ${doc.meta.title ?? doc.title}`,
+    description: doc.meta.description ?? "",
     generator: "Dreamsite V3",
     authors: [{ name: "Kévin RIFA", url: "https://creative-eye.fr" }],
     openGraph: {
-      title: page.meta.title,
-      description: page.meta.description,
+      title: doc.meta.title,
+      description: doc.meta.description,
       url: reqHeaders.get("referer") || "",
       type: `website`,
     },
     twitter: {
       card: "summary_large_image",
-      title: page.meta.title,
-      description: page.meta.description,
+      title: doc.meta.title,
+      description: doc.meta.description,
     },
   };
 }
