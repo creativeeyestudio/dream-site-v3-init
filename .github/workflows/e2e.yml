@@ -1,0 +1,49 @@
+# .github/workflows/e2e.yml
+name: E2E Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    services:
+      mongo:
+        image: mongo:6
+        ports: [27017:27017]
+        options: >-
+          --health-cmd="mongosh --eval 'db.adminCommand(\"ping\")'" 
+          --health-interval=10s 
+          --health-timeout=5s 
+          --health-retries=5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: |
+          cd front && npm install
+          cd ../back && npm install
+
+      - name: Build front (Next.js)
+        run: |
+          cd front && npm run build
+
+      - name: Build back (Payload CMS)
+        run: |
+          cd back && npm run build || echo "No build step needed"
+
+      - name: Run Playwright tests
+        run: |
+          npx playwright install
+          npm run test:e2e
+        env:
+          PAYLOAD_ADMIN_EMAIL: admin@example.com
+          PAYLOAD_ADMIN_PASSWORD: admin
