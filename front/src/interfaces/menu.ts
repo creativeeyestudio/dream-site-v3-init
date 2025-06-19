@@ -1,5 +1,5 @@
 import { ImageDataProps } from "./image";
-import { PageContentProps } from "./page";
+import { PageDoc } from "./page";
 
 export interface Menu {
   createdAt: string | Date;
@@ -11,7 +11,7 @@ export interface Menu {
 
 export interface MenuItem {
   type: "page" | "post" | "external";
-  page?: PageContentProps;
+  page?: PageDoc;
   label?: string;
   url?: string;
   newTab?: boolean;

@@ -5,17 +5,23 @@ import Link from "next/link";
 import React from "react";
 
 interface NavigationProps {
-  menuId: string;
+  menuId?: string | null;
   locale: string;
   classes?: string;
 }
 
-const Navigation = async ({ menuId, locale, classes }: NavigationProps) => {
+const Navigation = async ({
+  menuId = null,
+  locale,
+  classes,
+}: NavigationProps) => {
+  if (menuId == null || menuId == "") return;
+
   const menu = await getMenu(menuId, locale);
 
   if (!menu) {
-    console.error(`Menu non trouvé avec ${menuId}`);
-    return null;
+    console.error(`Menu non trouvé avec l'ID ${menuId}`);
+    return;
   }
 
   const getLinkProps = (item: MenuItem) => {
@@ -54,14 +60,16 @@ const Navigation = async ({ menuId, locale, classes }: NavigationProps) => {
 
   const renderImages = (items: MenuItem[]) => (
     <div>
-      {items.map((item, index) => (
-        item.image ? <Image
-          src={item.image.url}
-          alt={item.image.alt ?? ""}
-          key={index}
-          fill={true}
-        /> : <></>
-      ))}
+      {items.map((item) =>
+        item.image ? (
+          <Image
+            key={item.id}
+            src={item.image.url}
+            alt={item.image.alt ?? ""}
+            fill
+          />
+        ) : null,
+      )}
     </div>
   );
 

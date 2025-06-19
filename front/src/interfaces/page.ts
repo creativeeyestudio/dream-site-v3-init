@@ -17,24 +17,23 @@ export type BlockProps =
   | HeroscreenProps
   | HTMLContentProps;
 
-export interface PageContent {
-  layout: BlockProps[];
+export interface PageProps {
+  docs: PageDoc[];
 }
 
-export interface PageContentProps {
-  readonly createdAt: string | Date;
-  readonly updatedAt: string | Date;
-  readonly title: string;
-  readonly slug: string;
-  readonly content: PageContent;
-  readonly config: {
-    /** 0 = Brouillon, 1 = A relire, 2 = Publié */
-    published: 0 | 1 | 2;
+export interface PageDoc {
+  createdAt: string;
+  updatedAt: string;
+  title: string;
+  slug: string;
+  content: {
+    layout: BlockProps[];
+  };
+  config: {
     homepage: boolean;
   };
-  readonly meta: {
+  meta: {
     title: string;
     description: string;
   };
-  readonly id: string;
 }
