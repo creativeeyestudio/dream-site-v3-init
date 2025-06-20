@@ -1,7 +1,7 @@
 import { defineConfig } from '@playwright/test';
 
 export default defineConfig({
-    testDir: '../tests/back/cms',
+    testDir: './tests',
     timeout: 30_000,
     retries: 1,
     expect: { timeout: 5_000 },
@@ -15,7 +15,7 @@ export default defineConfig({
     },
     webServer: [
         {
-            command: 'pnpm --filter back dev',   // Payload
+            command: 'npm run dev',   // Payload
             port: 3001,
             reuseExistingServer: !process.env.CI,
             timeout: 20_000,
