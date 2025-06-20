@@ -18,7 +18,7 @@ export default defineConfig({
 
   webServer: [
     {
-        command: 'npm --prefix back run start',
+        command: 'npm run start',
         port: 3000,
         timeout: 120_000,
         shell: true,
