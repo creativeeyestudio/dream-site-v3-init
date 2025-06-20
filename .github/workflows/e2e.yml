@@ -32,19 +32,20 @@ jobs:
           cd front && npm install && npx playwright install --with-deps
           cd ../back && npm install
 
-      - name: Build front (Next.js)
+      - name: Test front (Next.js)
         run: |
           cd front && npm run build
-
-      - name: Build back (Payload CMS)
-        run: |
-          cd back && npm run build || echo "No build step needed"
-
-      - name: Run Playwright tests
-        run: |
           npx playwright install-deps
           npx playwright install
           npm run test:e2e
+
+      - name: Test back (Payload CMS)
+        run: |
+          cd back && npm run build || echo "No build step needed"
+          npx playwright install-deps
+          npx playwright install
+          npm run test:e2e
+
         env:
           PAYLOAD_ADMIN_EMAIL: admin@example.com
           PAYLOAD_ADMIN_PASSWORD: admin
