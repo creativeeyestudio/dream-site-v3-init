@@ -7,10 +7,18 @@ import Parallax from '@/blocks/Parallax'
 import TextDoubleImage from '@/blocks/TextImageDouble'
 import TextImage from '@/blocks/TextImage'
 import { convertRichTextToHTML } from '@/utils/convertRichTextToHTML'
+import { SerializedEditorState } from '@payloadcms/richtext-lexical/lexical'
 
-async function enrichLayoutWithHTML(layout = []) {
+type LayoutBlock = {
+  blockType: string
+  blockName?: string
+  content?: SerializedEditorState
+  html?: string
+  [key: string]: unknown
+}
+
+export async function enrichLayoutWithHTML(layout: LayoutBlock[] = []): Promise<LayoutBlock[]> {
   return layout.map((block) => {
-    // Supposons que les blocs avec un champ "content" de type richText soient les seuls à traiter
     if (block.content) {
       return {
         ...block,
