@@ -29,7 +29,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd front && npm install
+          cd front && npm install && npx playwright install --with-deps
           cd ../back && npm install
 
       - name: Build front (Next.js)
@@ -42,7 +42,8 @@ jobs:
 
       - name: Run Playwright tests
         run: |
-          npx playwright install --with-deps
+          npx playwright install-deps
+          npx playwright install
           npm run test:e2e
         env:
           PAYLOAD_ADMIN_EMAIL: admin@example.com

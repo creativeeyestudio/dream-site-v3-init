@@ -1,8 +1,8 @@
-import { CollectionConfig } from 'payload'
+import { CollectionConfig, Field } from 'payload'
 import { v4 as uuidv4 } from 'uuid'
 
 // Réutilisable : structure commune pour les liens
-const linkFields = () => [
+const linkFields = (): Field[] => [
   {
     name: 'type',
     type: 'radio',
@@ -19,7 +19,7 @@ const linkFields = () => [
     type: 'relationship',
     relationTo: 'pages',
     admin: {
-      condition: (_, siblingData) => siblingData.type === 'page',
+      condition: (_data, sibling) => sibling.type === 'page',
     },
   },
   {
@@ -27,7 +27,7 @@ const linkFields = () => [
     type: 'relationship',
     relationTo: 'posts',
     admin: {
-      condition: (_, siblingData) => siblingData.type === 'post',
+      condition: (_data, sibling) => sibling.type === 'post',
     },
   },
   {
@@ -36,14 +36,14 @@ const linkFields = () => [
     required: true,
     localized: true,
     admin: {
-      condition: (_, siblingData) => siblingData.type === 'external',
+      condition: (_data, sibling) => sibling.type === 'external',
     },
   },
   {
     name: 'url',
     type: 'text',
     admin: {
-      condition: (_, siblingData) => siblingData.type === 'external',
+      condition: (_data, sibling) => sibling.type === 'external',
     },
   },
   {
@@ -51,7 +51,7 @@ const linkFields = () => [
     label: 'Image',
     type: 'relationship',
     relationTo: 'media',
-    required: false
+    required: false,
   },
   {
     name: 'newTab',
@@ -85,10 +85,6 @@ const Navigation: CollectionConfig = {
         { label: 'Menu secondaire', value: 'secondary-menu' },
         { label: 'Menu pied de page', value: 'footer-menu' },
       ],
-      // admin: {
-      //   position: 'sidebar',
-      //   description: 'Sélectionne une position unique pour ce menu',
-      // },
     },
     {
       name: 'items',

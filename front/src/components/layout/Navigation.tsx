@@ -59,7 +59,7 @@ const Navigation = async ({
   );
 
   const renderImages = (items: MenuItem[]) => (
-    <div>
+   <div>
       {items.map((item) =>
         item.image ? (
           <Image
