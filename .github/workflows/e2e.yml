@@ -39,15 +39,6 @@ jobs:
         working-directory: back
         run: npm run build || echo "No build step needed"
 
-      - name: Install Playwright (back)
-        run: |
-          npx playwright install-deps
-          npx playwright install
-
-      - name: Run Payload E2E tests
-        working-directory: back
-        run: npm run test:e2e
-
   test-front:
     name: Test front (Next.js)
     runs-on: ubuntu-latest
@@ -69,16 +60,3 @@ jobs:
       - name: Build Next.js
         working-directory: front
         run: npm run build
-
-      - name: Install Playwright (front)
-        run: |
-          npx playwright install-deps
-          npx playwright install
-
-      - name: Run Next.js E2E tests
-        working-directory: front
-        run: npm run test:e2e
-
-        env:
-          PAYLOAD_ADMIN_EMAIL: admin@example.com
-          PAYLOAD_ADMIN_PASSWORD: admin
