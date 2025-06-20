@@ -21,11 +21,12 @@ export default defineConfig({
   webServer: [
     {
       // 👇 Lance Payload depuis le dossier back
-      command: 'npm --prefix back run start', // ou "npm run start" avec cwd
+      command: 'npm --prefix back run start',
       port: 3000,
-      timeout: 120_000,       // laisse-lui 2 min pour booter en CI
+      timeout: 120_000,
       reuseExistingServer: !process.env.CI,
-      cwd: './back',          // garantit qu’on est bien dans back/
+      cwd: './back',
+      shell: true, 
     },
     // ⇣ Dé‑commente si tu dois aussi démarrer le front en CI
     // {
