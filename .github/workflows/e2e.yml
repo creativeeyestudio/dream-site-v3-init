@@ -42,7 +42,7 @@ jobs:
 
       - name: Run Playwright tests
         run: |
-          npx playwright install
+          npx playwright install --with-deps
           npm run test:e2e
         env:
           PAYLOAD_ADMIN_EMAIL: admin@example.com
