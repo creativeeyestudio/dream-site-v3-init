@@ -15,7 +15,7 @@ export default defineConfig({
     },
     webServer: [
         {
-            command: 'pnpm --filter front dev',  // Next.js
+            command: 'npm run dev',
             port: 3000,
             reuseExistingServer: !process.env.CI,
             timeout: 20_000,
