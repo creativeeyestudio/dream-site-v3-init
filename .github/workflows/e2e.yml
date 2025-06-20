@@ -9,6 +9,9 @@ jobs:
   test-back:
     name: Test back (Payload CMS)
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
 
     services:
       mongo:

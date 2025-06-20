@@ -1,3 +1,5 @@
+import { test, expect } from '@playwright/test';
+
 test.describe('CRUD des Posts', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('http://localhost:3000/admin');
