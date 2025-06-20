@@ -1,4 +1,3 @@
-# .github/workflows/e2e.yml
 name: E2E Tests
 
 on:
@@ -7,16 +6,18 @@ on:
   pull_request:
 
 jobs:
-  e2e:
+  test-back:
+    name: Test back (Payload CMS)
     runs-on: ubuntu-latest
+
     services:
       mongo:
         image: mongo:6
         ports: [27017:27017]
         options: >-
-          --health-cmd="mongosh --eval 'db.adminCommand(\"ping\")'" 
-          --health-interval=10s 
-          --health-timeout=5s 
+          --health-cmd="mongosh --eval 'db.adminCommand(\"ping\")'"
+          --health-interval=10s
+          --health-timeout=5s
           --health-retries=5
 
     steps:
@@ -27,24 +28,53 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install dependencies
-        run: |
-          cd front && npm install && npx playwright install --with-deps
-          cd ../back && npm install
+      - name: Install back dependencies
+        working-directory: back
+        run: npm ci
 
-      - name: Test back (Payload CMS)
+      - name: Build Payload
+        working-directory: back
+        run: npm run build || echo "No build step needed"
+
+      - name: Install Playwright (back)
         run: |
-          cd back && npm run build || echo "No build step needed"
           npx playwright install-deps
           npx playwright install
-          npm run test:e2e
 
-      - name: Test front (Next.js)
+      - name: Run Payload E2E tests
+        working-directory: back
+        run: npm run test:e2e
+
+  test-front:
+    name: Test front (Next.js)
+    runs-on: ubuntu-latest
+
+    needs: test-back
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install front dependencies
+        working-directory: front
+        run: npm ci
+
+      - name: Build Next.js
+        working-directory: front
+        run: npm run build
+
+      - name: Install Playwright (front)
         run: |
-          cd front && npm run build
           npx playwright install-deps
           npx playwright install
-          npm run test:e2e
+
+      - name: Run Next.js E2E tests
+        working-directory: front
+        run: npm run test:e2e
 
         env:
           PAYLOAD_ADMIN_EMAIL: admin@example.com
