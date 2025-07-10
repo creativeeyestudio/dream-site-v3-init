@@ -11,7 +11,7 @@ services:
       - ./front:/app/
       - /app/node_modules
     env_file:
-      - ./front/.env
+      - .env
     depends_on:
       - back
 
@@ -27,6 +27,6 @@ services:
       - ./back:/app
       - /app/node_modules
     env_file:
-      - ./back/.env
+      - .env
     depends_on:
       - mongo
