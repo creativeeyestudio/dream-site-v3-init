@@ -27,6 +27,24 @@ const Galleries: CollectionConfig = {
       hasMany: true,
       required: true,
     },
+
+    /* ------------------------ Options de publication ------------------------ */
+    {
+      name: 'config',
+      type: 'group',
+      admin: {
+        position: 'sidebar',
+      },
+      fields: [
+        {
+          name: 'site',
+          type: 'relationship',
+          relationTo: 'settings',
+          required: true,
+          multiple: true,
+        },
+      ],
+    },
   ],
 }
 

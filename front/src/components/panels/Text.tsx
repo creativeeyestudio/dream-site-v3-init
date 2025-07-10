@@ -1,7 +1,8 @@
 import { TextProps } from "@/interfaces/blocks";
+import React from "react";
 
-const Text: React.FC<TextProps> = ({ title, html, first_block }) => {
-  const TitleTag = first_block ? "h1" : "h2";
+const Text: React.FC<TextProps> = ({ title, html, firstBlock }) => {
+  const TitleTag = firstBlock ? "h1" : "h2";
 
   return (
     <section className="text">

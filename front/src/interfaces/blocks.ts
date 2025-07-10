@@ -13,14 +13,14 @@ export interface TextProps {
   blockType?: "text";
   title: string;
   html: string;
-  first_block: boolean;
+  firstBlock: boolean;
 }
 
 export interface TextIntroProps {
   blockType?: "text-intro";
   title: string;
   html: string;
-  first_block: boolean;
+  firstBlock: boolean;
 }
 
 export interface TextImageProps {
@@ -28,7 +28,7 @@ export interface TextImageProps {
   title: string;
   html: string;
   image: ImageDataProps;
-  first_block: boolean;
+  firstBlock: boolean;
 }
 
 export interface TextDoubleImageProps {
@@ -37,16 +37,16 @@ export interface TextDoubleImageProps {
   html: string;
   image1: ImageDataProps;
   image2?: ImageDataProps;
-  first_block: boolean;
+  firstBlock: boolean;
 }
 
 export interface HeroscreenProps {
   blockType?: "heroscreen";
-  hero_image: ImageDataProps[];
+  heroImage: ImageDataProps[];
 }
 
 export interface ParallaxProps {
   blockType?: "parallax";
-  parallax_image: ImageDataProps;
-  parallax_speed: number;
+  parallaxImage: ImageDataProps;
+  parallaxSpeed: number;
 }

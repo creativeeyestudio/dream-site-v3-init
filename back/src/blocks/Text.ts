@@ -18,6 +18,7 @@ const Text: Block = {
       label: 'Contenu',
       type: 'richText',
       required: true,
+      hidden: false,
     },
   ],
 }

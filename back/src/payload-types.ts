@@ -73,6 +73,8 @@ export interface Config {
     posts: Post;
     gallery: Gallery;
     navigation: Navigation;
+    settings: Setting;
+    'chr-config': ChrConfig;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -85,6 +87,8 @@ export interface Config {
     posts: PostsSelect<false> | PostsSelect<true>;
     gallery: GallerySelect<false> | GallerySelect<true>;
     navigation: NavigationSelect<false> | NavigationSelect<true>;
+    settings: SettingsSelect<false> | SettingsSelect<true>;
+    'chr-config': ChrConfigSelect<false> | ChrConfigSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -135,7 +139,7 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: string;
-  role?: ('admin' | 'editor' | 'publisher') | null;
+  role: 'admin' | 'editor' | 'author' | 'contributor';
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -145,6 +149,13 @@ export interface User {
   hash?: string | null;
   loginAttempts?: number | null;
   lockUntil?: string | null;
+  sessions?:
+    | {
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
+      }[]
+    | null;
   password?: string | null;
 }
 /**
@@ -272,7 +283,7 @@ export interface Page {
               blockType: 'parallax';
             }
           | {
-              content: string;
+              htmlCode: string;
               id?: string | null;
               blockName?: string | null;
               blockType: 'html-content';
@@ -286,9 +297,9 @@ export interface Page {
         )[]
       | null;
   };
-  config?: {
+  config: {
+    site: string | Setting;
     published?: ('0' | '1' | '2') | null;
-    homepage?: boolean | null;
   };
   meta?: {
     title?: string | null;
@@ -297,6 +308,24 @@ export interface Page {
      * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
      */
     image?: (string | null) | Media;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "settings".
+ */
+export interface Setting {
+  id: string;
+  title?: string | null;
+  identityGroup?: {
+    logo?: (string | null) | Media;
+    favicon?: (string | null) | Media;
+    homepage?: (string | null) | Page;
+  };
+  maintenanceGroup?: {
+    maintenance?: boolean | null;
   };
   updatedAt: string;
   createdAt: string;
@@ -326,10 +355,10 @@ export interface Post {
     [k: string]: unknown;
   };
   coverImage?: (string | null) | Media;
-  publishedDate?: string | null;
-  config?: {
-    author?: (string | null) | User;
+  config: {
+    site: string | Setting;
     published?: ('0' | '1' | '2') | null;
+    createdBy?: (string | null) | User;
   };
   meta?: {
     title?: string | null;
@@ -350,6 +379,9 @@ export interface Gallery {
   id: string;
   gallery_name?: string | null;
   gallery_images: (string | Media)[];
+  config: {
+    site: string | Setting;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -384,6 +416,35 @@ export interface Navigation {
         id?: string | null;
       }[]
     | null;
+  config: {
+    site: string | Setting;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "chr-config".
+ */
+export interface ChrConfig {
+  id: string;
+  hotelData: {
+    site: string | Setting;
+  };
+  thais?: {
+    apiUrl?: string | null;
+    username?: string | null;
+    password?: string | null;
+    passwordHash?: string | null;
+  };
+  siteminder?: {
+    apiUrl?: string | null;
+    password?: string | null;
+    passwordHash?: string | null;
+  };
+  zenchef?: {
+    widget?: string | null;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -417,6 +478,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'navigation';
         value: string | Navigation;
+      } | null)
+    | ({
+        relationTo: 'settings';
+        value: string | Setting;
+      } | null)
+    | ({
+        relationTo: 'chr-config';
+        value: string | ChrConfig;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -475,6 +544,13 @@ export interface UsersSelect<T extends boolean = true> {
   hash?: T;
   loginAttempts?: T;
   lockUntil?: T;
+  sessions?:
+    | T
+    | {
+        id?: T;
+        createdAt?: T;
+        expiresAt?: T;
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -553,7 +629,7 @@ export interface PagesSelect<T extends boolean = true> {
               'html-content'?:
                 | T
                 | {
-                    content?: T;
+                    htmlCode?: T;
                     id?: T;
                     blockName?: T;
                   };
@@ -569,8 +645,8 @@ export interface PagesSelect<T extends boolean = true> {
   config?:
     | T
     | {
+        site?: T;
         published?: T;
-        homepage?: T;
       };
   meta?:
     | T
@@ -592,12 +668,12 @@ export interface PostsSelect<T extends boolean = true> {
   excerpt?: T;
   content?: T;
   coverImage?: T;
-  publishedDate?: T;
   config?:
     | T
     | {
-        author?: T;
+        site?: T;
         published?: T;
+        createdBy?: T;
       };
   meta?:
     | T
@@ -616,6 +692,11 @@ export interface PostsSelect<T extends boolean = true> {
 export interface GallerySelect<T extends boolean = true> {
   gallery_name?: T;
   gallery_images?: T;
+  config?:
+    | T
+    | {
+        site?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -648,6 +729,65 @@ export interface NavigationSelect<T extends boolean = true> {
               id?: T;
             };
         id?: T;
+      };
+  config?:
+    | T
+    | {
+        site?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "settings_select".
+ */
+export interface SettingsSelect<T extends boolean = true> {
+  title?: T;
+  identityGroup?:
+    | T
+    | {
+        logo?: T;
+        favicon?: T;
+        homepage?: T;
+      };
+  maintenanceGroup?:
+    | T
+    | {
+        maintenance?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "chr-config_select".
+ */
+export interface ChrConfigSelect<T extends boolean = true> {
+  hotelData?:
+    | T
+    | {
+        site?: T;
+      };
+  thais?:
+    | T
+    | {
+        apiUrl?: T;
+        username?: T;
+        password?: T;
+        passwordHash?: T;
+      };
+  siteminder?:
+    | T
+    | {
+        apiUrl?: T;
+        password?: T;
+        passwordHash?: T;
+      };
+  zenchef?:
+    | T
+    | {
+        widget?: T;
       };
   updatedAt?: T;
   createdAt?: T;

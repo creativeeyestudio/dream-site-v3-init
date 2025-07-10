@@ -10,11 +10,7 @@ const Header: React.FC<HeaderProps> = ({ locale }) => {
     <>
       <header></header>
       <div className="nav--primary">
-        <Navigation
-          menuId={process.env.MAIN_MENU}
-          locale={locale}
-          classes={undefined}
-        />
+        <Navigation menuId={'main-menu'} locale={locale} />
       </div>
     </>
   );

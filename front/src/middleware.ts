@@ -27,8 +27,13 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  // On vérifie l'URL et on l'intègre dans le header
+  const hostWithoutWww = (request.headers.get('host') ?? '').replace(/^www\./, '');
+  const res = NextResponse.next();
+  res.headers.set('x-website', hostWithoutWww);
+
   // Laisser passer tout le reste
-  return NextResponse.next();
+  return res;
 }
 
 // Appliquer uniquement sur la racine

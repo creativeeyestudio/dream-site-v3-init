@@ -1,13 +1,14 @@
 import { TextImageProps } from "@/interfaces/blocks";
 import Image from "next/image";
+import React from "react";
 
 const TextImage: React.FC<TextImageProps> = ({
   title,
   html,
   image,
-  first_block,
+  firstBlock,
 }) => {
-  const TitleTag = first_block ? "h1" : "h2";
+  const TitleTag = firstBlock ? "h1" : "h2";
 
   return process.env.NEXT_PUBLIC_API_URL ? (
     <section className="text-img">

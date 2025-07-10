@@ -4,11 +4,11 @@ import Ukiyo from "ukiyojs";
 import { ParallaxProps } from "@/interfaces/blocks";
 
 const Parallax: React.FC<ParallaxProps> = ({
-  parallax_image,
-  parallax_speed,
+  parallaxImage,
+  parallaxSpeed,
 }) => {
   new Ukiyo(".parallax_image", {
-    speed: parallax_speed,
+    speed: parallaxSpeed,
   });
 
   return process.env.NEXT_PUBLIC_API_URL ? (
@@ -16,8 +16,8 @@ const Parallax: React.FC<ParallaxProps> = ({
       <figure className="parallax">
         <Image
           className="parallax_image"
-          src={process.env.NEXT_PUBLIC_API_URL + parallax_image.url}
-          alt={parallax_image.alt ?? ""}
+          src={process.env.NEXT_PUBLIC_API_URL + parallaxImage.url}
+          alt={parallaxImage.alt ?? ""}
           fill={true}
         />
       </figure>

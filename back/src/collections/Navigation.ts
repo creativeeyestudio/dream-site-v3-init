@@ -1,3 +1,4 @@
+import { accessNavigation } from '@/access/navigationAccess'
 import { CollectionConfig, Field } from 'payload'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -70,9 +71,7 @@ const Navigation: CollectionConfig = {
     group: 'Contenu',
     useAsTitle: 'menuId',
   },
-  access: {
-    read: ({ req }) => req.user?.role === 'admin', // Public
-  },
+  access: accessNavigation,
   fields: [
     {
       name: 'menuId',
@@ -97,6 +96,24 @@ const Navigation: CollectionConfig = {
           type: 'array',
           label: 'Sous-menus',
           fields: linkFields(),
+        },
+      ],
+    },
+
+    /* ------------------------ Options de publication ------------------------ */
+    {
+      name: 'config',
+      type: 'group',
+      admin: {
+        position: 'sidebar',
+      },
+      fields: [
+        {
+          name: 'site',
+          type: 'relationship',
+          relationTo: 'settings',
+          required: true,
+          multiple: true,
         },
       ],
     },

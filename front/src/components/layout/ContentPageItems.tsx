@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { BlockProps } from "@/interfaces/page";
 import Text from "../panels/Text";
 import TextIntro from "../panels/TextIntro";
@@ -27,7 +28,7 @@ const ContentPageItems: React.FC<ContentPageItemsProps> = ({ blocks }) => {
               <Text
                 title={block.title}
                 html={block.html}
-                first_block={isFirst}
+                firstBlock={isFirst}
                 key={index}
               />
             );
@@ -36,7 +37,7 @@ const ContentPageItems: React.FC<ContentPageItemsProps> = ({ blocks }) => {
               <TextIntro
                 title={block.title}
                 html={block.html}
-                first_block={isFirst}
+                firstBlock={isFirst}
                 key={index}
               />
             );
@@ -46,7 +47,7 @@ const ContentPageItems: React.FC<ContentPageItemsProps> = ({ blocks }) => {
                 title={block.title}
                 html={block.html}
                 image={block.image}
-                first_block={isFirst}
+                firstBlock={isFirst}
                 key={index}
               />
             );
@@ -57,20 +58,20 @@ const ContentPageItems: React.FC<ContentPageItemsProps> = ({ blocks }) => {
                 html={block.html}
                 image1={block.image1}
                 image2={block.image2}
-                first_block={isFirst}
+                firstBlock={isFirst}
                 key={index}
               />
             );
           case "parallax":
             return (
               <Parallax
-                parallax_image={block.parallax_image}
-                parallax_speed={block.parallax_speed}
+                parallaxImage={block.parallaxImage}
+                parallaxSpeed={block.parallaxSpeed}
                 key={index}
               />
             );
           case "heroscreen":
-            return <Heroscreen hero_image={block.hero_image} key={index} />;
+            return <Heroscreen heroImage={block.heroImage} key={index} />;
           case "html-content":
             return <HtmlContent content={block.content} key={index} />;
           default:

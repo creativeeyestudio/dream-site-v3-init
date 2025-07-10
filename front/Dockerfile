@@ -1,10 +1,5 @@
 FROM node:20-alpine
 
-RUN apk add --no-cache \
-    vips-dev \
-    build-base \
-    python3
-
 WORKDIR /app
 
 COPY package.json package-lock.json ./

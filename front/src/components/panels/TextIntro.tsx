@@ -1,7 +1,8 @@
 import { TextIntroProps } from "@/interfaces/blocks";
+import React from "react";
 
-const TextIntro: React.FC<TextIntroProps> = ({ title, html, first_block }) => {
-  const TitleTag = first_block ? "h1" : "h2";
+const TextIntro: React.FC<TextIntroProps> = ({ title, html, firstBlock }) => {
+  const TitleTag = firstBlock ? "h1" : "h2";
 
   return (
     <section className="text-intro">

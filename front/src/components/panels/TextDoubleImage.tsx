@@ -7,9 +7,9 @@ const TextDoubleImage: React.FC<TextDoubleImageProps> = ({
   html,
   image1,
   image2,
-  first_block,
+  firstBlock,
 }) => {
-  const TitleTag = first_block ? "h1" : "h2";
+  const TitleTag = firstBlock ? "h1" : "h2";
 
   return process.env.NEXT_PUBLIC_API_URL != undefined ? (
     <section className="text-double-img">

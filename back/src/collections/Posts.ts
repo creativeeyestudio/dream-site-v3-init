@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { convertRichTextToHTML } from '@/utils/convertRichTextToHTML'
+import { accessPosts } from '@/access/postsAccess'
 
 const Posts: CollectionConfig = {
   slug: 'posts',
@@ -7,9 +8,7 @@ const Posts: CollectionConfig = {
     group: 'Contenu',
     useAsTitle: 'title',
   },
-  access: {
-    read: () => true, // ou gère selon ton besoin
-  },
+  access: accessPosts,
   labels: {
     singular: 'Article',
     plural: 'Articles',
@@ -17,38 +16,36 @@ const Posts: CollectionConfig = {
   fields: [
     {
       name: 'title',
+      label: 'Titre du post',
       type: 'text',
       required: true,
       localized: true,
     },
     {
       name: 'slug',
+      label: 'URL du post',
       type: 'text',
       required: true,
       unique: true,
     },
     {
       name: 'excerpt',
+      label: 'Introduction',
       type: 'textarea',
       localized: true,
     },
     {
       name: 'content',
+      label: 'Contenu',
       type: 'richText',
       required: true,
       localized: true,
     },
     {
       name: 'coverImage',
+      label: 'Image du post',
       type: 'upload',
       relationTo: 'media',
-    },
-    {
-      name: 'publishedDate',
-      type: 'date',
-      admin: {
-        condition: (data) => data.config?.published === '2',
-      },
     },
     {
       name: 'config',
@@ -58,11 +55,35 @@ const Posts: CollectionConfig = {
       },
       fields: [
         {
-          name: 'author',
+          name: 'site',
+          type: 'relationship',
+          relationTo: 'settings',
+          required: true,
+          multiple: true,
+        },
+        {
+          name: 'published',
+          type: 'radio',
+          label: 'Publié',
+          defaultValue: '0',
+          options: [
+            { label: 'En brouillon', value: '0' },
+            { label: 'À relire', value: '1' },
+            { label: 'Publié', value: '2' },
+          ],
+          access: {
+            create: ({ req: { user } }) => user?.role === 'admin' || user?.role === 'editor',
+            read: ({ req: { user } }) => user?.role === 'admin' || user?.role === 'editor',
+            update: ({ req: { user } }) => user?.role === 'admin' || user?.role === 'editor',
+          },
+        },
+        {
+          name: 'createdBy',
+          label: 'Auteur',
           type: 'relationship',
           relationTo: 'users',
           admin: {
-            readOnly: true,
+            hidden: true,
           },
           hooks: {
             beforeChange: [
@@ -74,26 +95,23 @@ const Posts: CollectionConfig = {
             ],
           },
         },
-        {
-          name: 'published',
-          type: 'radio',
-          label: 'Publié',
-          options: [
-            { label: 'En brouillon', value: '0' },
-            { label: 'À relire', value: '1' },
-            { label: 'Publié', value: '2' },
-          ],
-        },
       ],
     },
   ],
 
   hooks: {
     afterRead: [
-      async ({ doc }) => {
+      async ({ doc, req }) => {
         // Convertir le champ richText en HTML dans un champ `html`
         if (doc?.content) {
           doc.html = convertRichTextToHTML(doc.content)
+        }
+        // Marque si l'utilisateur est propriétaire de l'article
+        if (req?.user) {
+          doc.isOwner =
+            typeof doc?.config?.createdBy?.equals === 'function'
+              ? doc.config.createdBy.equals(req.user.id)
+              : doc.config?.createdBy === req.user.id
         }
         return doc
       },

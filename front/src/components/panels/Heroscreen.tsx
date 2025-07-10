@@ -11,7 +11,7 @@ import "swiper/css/scrollbar";
 import { HeroscreenProps } from "@/interfaces/blocks";
 
 const Heroscreen: React.FC<HeroscreenProps> = (content: HeroscreenProps) => {
-  return content.hero_image.length > 1 ? (
+  return content.heroImage.length > 1 ? (
     <Swiper
       effect="fade"
       centeredSlides={true}
@@ -24,7 +24,7 @@ const Heroscreen: React.FC<HeroscreenProps> = (content: HeroscreenProps) => {
       modules={[EffectFade, Pagination, Autoplay]}
       className="heroscreen"
     >
-      {content.hero_image.map((image, index) =>
+      {content.heroImage.map((image, index) =>
         process.env.NEXT_PUBLIC_API_URL != undefined ? (
           <SwiperSlide key={index} className="heroscreen__container">
             <Image
@@ -43,8 +43,8 @@ const Heroscreen: React.FC<HeroscreenProps> = (content: HeroscreenProps) => {
   ) : process.env.NEXT_PUBLIC_API_URL != undefined ? (
     <div className="heroscreen__container">
       <Image
-        src={process.env.NEXT_PUBLIC_API_URL + content.hero_image[0].url}
-        alt={content.hero_image[0].alt ?? "Pas de text alt"}
+        src={process.env.NEXT_PUBLIC_API_URL + content.heroImage[0].url}
+        alt={content.heroImage[0].alt ?? "Pas de text alt"}
         fill={true}
         objectFit="cover"
         priority={true}

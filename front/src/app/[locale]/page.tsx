@@ -1,53 +1,43 @@
-import { getHomePage } from "@/api/pages";
-import { notFound } from "next/navigation";
-import { PageProps } from "@/interfaces/page";
-import ContentPageItems from "@/components/layout/ContentPageItems";
 import { Metadata } from "next";
-import { headers } from "next/headers";
+import {fetchHomePage} from "@/lib/cms";
+import ContentPageItems from "@/components/layout/ContentPageItems";
+import { notFound } from "next/navigation";
+import { headers } from 'next/headers';
 
 export type PageHomeParams = Promise<{
   locale: string;
 }>;
 
-export default async function HomePage(props: { params: PageHomeParams }) {
-  const params = await props.params;
+/* --------------------------------------------------
+   SEO dynamique
+-------------------------------------------------- */
+export async function generateMetadata(props: { params: PageHomeParams }): Promise<Metadata> {
+  const { locale } = await props.params;
+  const headersList = await headers();
+  const site = headersList.get('x-website') ?? 'default-site';
+  const page = await fetchHomePage(site, locale);
 
-  const page: PageProps = await getHomePage(params.locale);
-  const doc = page.docs?.[0];
+  if (!page) return { title: 'Page introuvable' };
 
-  return doc ? <ContentPageItems blocks={doc.content.layout} /> : notFound();
-}
-
-// SEO dynamique
-export async function generateMetadata(props: {
-  params: PageHomeParams;
-}): Promise<Metadata> {
-  const reqHeaders = await headers();
-  const params = await props.params;
-  const page: PageProps | null = await getHomePage(params.locale);
-  const doc = page?.docs?.[0];
-
-  if (!doc) {
-    return {
-      title: "Page introuvable",
-    };
-  }
+  const { title, description } = page.meta;
+  const fullTitle = `${title ?? page.title}`;
 
   return {
-    title: `≻ ${doc.meta.title ?? doc.title}`,
-    description: doc.meta.description ?? "",
-    generator: "Dreamsite V3",
-    authors: [{ name: "Kévin RIFA", url: "https://creative-eye.fr" }],
-    openGraph: {
-      title: doc.meta.title,
-      description: doc.meta.description,
-      url: reqHeaders.get("referer") || "",
-      type: `website`,
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: doc.meta.title,
-      description: doc.meta.description,
-    },
+    title       : fullTitle,
+    description : description ?? '',
   };
+}
+
+/* --------------------------------------------------
+   Rendu de la page
+-------------------------------------------------- */
+export default async function HomePage(props: { params: PageHomeParams }) {
+  const { locale } = await props.params;
+  const headersList = await headers();
+  const site = headersList.get('x-website') ?? 'default-site';
+  const page = await fetchHomePage(site, locale);
+
+  if (!page) return notFound();
+
+  return <ContentPageItems blocks={page.content.layout} />;
 }
